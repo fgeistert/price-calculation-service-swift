@@ -72,4 +72,14 @@ final class AppTests: XCTestCase {
             XCTAssertEqual(res.status, .notFound)
         })
     }
+    
+    func testProductsEndpoint() throws {
+        let app = Application(.testing)
+        defer { app.shutdown() }
+        try configure(app)
+
+        try app.test(.GET, "products", afterResponse: { res in
+            XCTAssertEqual(res.status, .ok)
+        })
+    }
 }
