@@ -10,12 +10,8 @@ import Vapor
 
 struct PriceResponse: ResponseEncodable {
     func encodeResponse(for request: Request) -> EventLoopFuture<Response> {
-        guard let productsURL = Bundle.module.url(forResource: "products", withExtension: "json"),
-              let productsData = try? Data(contentsOf: productsURL),
-              let products = try? JSONDecoder().decode([Product].self, from: productsData)
-        else {
-            return request.eventLoop.makeFailedFuture(AppError.failedToLoadProducts)
-        }
+        // workaround: in prod the file cannot be read (bug in SPM?), so use static getAll()
+        let products = Products.getAll()
         
         guard let priceRequest = try? request.query.decode(PriceRequest.self) else {
             return request.eventLoop.makeFailedFuture(AppError.invalidRequest)
