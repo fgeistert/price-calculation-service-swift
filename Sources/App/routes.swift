@@ -11,6 +11,6 @@ func routes(_ app: Application) throws {
     }
 
     app.get("alive") { _ -> String in
-        return "Alive!"
+        return "Alive!\n\nEnvironment: \(Environment.get("NAME") ?? "?")"
     }
 }
